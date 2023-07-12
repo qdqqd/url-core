@@ -2,7 +2,7 @@ name: Scheduled Requests
 
 on:
   schedule:
-    - cron: '*/1 * * * *' # 每隔 1 分钟触发一次
+    - cron: '*/1 * * * *' # 每隔 5 分钟触发一次，可根据需求自行调整
 
 jobs:
   request:
@@ -14,6 +14,7 @@ jobs:
 
       - name: Make HTTP requests
         run: |
-          curl http://example.com/api1
-          curl http://example.com/api2
-          # 添加更多的 curl 命令来请求其他的 HTTP 接口
+          curl https://qdqqd.com/
+          curl https://www.qdqqd.com/
+          curl https://api.qdqqd.com/
+          curl https://tc.qdqqd.com/
