@@ -1,0 +1,19 @@
+name: Scheduled Requests
+
+on:
+  schedule:
+    - cron: '*/1 * * * *' # 每隔 1 分钟触发一次
+
+jobs:
+  request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Make HTTP requests
+        run: |
+          curl http://example.com/api1
+          curl http://example.com/api2
+          # 添加更多的 curl 命令来请求其他的 HTTP 接口
