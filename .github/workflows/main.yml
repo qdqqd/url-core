@@ -14,7 +14,4 @@ jobs:
 
       - name: Make HTTP requests
         run: |
-          curl https://qdqqd.com/
-          curl https://www.qdqqd.com/
-          curl https://api.qdqqd.com/
-          curl https://tc.qdqqd.com/
+          curl https://qdqqd.com/qdqqd
