@@ -15,3 +15,5 @@ jobs:
       - name: Make HTTP requests
         run: |
           curl https://qdqqd.com/qdqqd
+          curl https://purge.jsdelivr.net/gh/qdqqd/Url-Shorten-Worker/index.html
+          curl https://purge.jsdelivr.net/gh/qdqqd/Url-Shorten-Worker@main/index.html
