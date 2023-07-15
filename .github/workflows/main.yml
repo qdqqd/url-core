@@ -2,7 +2,7 @@ name: Scheduled Requests
 
 on:
   schedule:
-    - cron: '*/1 * * * *' # 每隔 5 分钟触发一次，可根据需求自行调整
+    - cron: '*/2 * * * *' # 每隔 2 分钟触发一次，可根据需求自行调整
 
 jobs:
   request:
