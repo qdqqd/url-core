@@ -17,3 +17,4 @@ jobs:
           curl https://qdqqd.com/qdqqd
           curl https://purge.jsdelivr.net/gh/qdqqd/Url-Shorten-Worker/index.html
           curl https://purge.jsdelivr.net/gh/qdqqd/Url-Shorten-Worker@main/index.html
+          curl https://qdqqd.com/
