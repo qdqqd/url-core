@@ -16,7 +16,6 @@ jobs:
         run: |
           curl https://qdqqd.com/qdqqd
           curl https://purge.jsdelivr.net/gh/qdqqd/Url-Shorten-Worker/index.html
-          curl https://purge.jsdelivr.net/gh/qdqqd/Url-Shorten-Worker@main/index.html
           curl https://qdqqd.com/
           curl https://www.baidu.com/link?url=k6MpuxpsfWu1q3XbJqMf31xdnRFZlPLI0XofqdrtMtG&wd=柯艺云&eqid=c138d464000f60670000000564b37e14
           curl https://www.baidu.com/link?url=eI3xWiks2lvVhUQD2SghshXfGu4ArJbOF_3x_kGsjKW&wd=柯艺云&eqid=94451128000264490000000564b0ceb6
