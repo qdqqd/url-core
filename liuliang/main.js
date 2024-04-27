@@ -237,7 +237,7 @@ function ckbl() {
 
 function ckip(ip, tag) {
     if (checkIP) {
-        fetch('https://down.ljxnet.cn/?headers=%7B%22referer%22%3A%22https%3A%2F%2Fipinfo.io%2F%22%2C%22origin%22%3A%22https%3A%2F%2Fipinfo.io%2F%22%7D&url=https%3A%2F%2Fipinfo.io%2Fwidget%2Fdemo%2F' + ip)
+        fetch('https://ipinfo.io/widget/demo/' + ip)
             .then(response => response.json())
             .then(data => {
                 console.log(data.input, data.data.country, data.data.city, data.data.asn.name, data.data.company.type)
