@@ -226,7 +226,7 @@ function ckbl() {
     if (visibl) {
         const controller = new AbortController();
         setTimeout(() => controller.abort(), 2000);
-        fetch("https://twitter.com/", { signal: controller.signal, method: "HEAD", cache: "no-store", mode: 'no-cors', referrerPolicy: 'no-referrer' })
+        fetch("https://baidu.com/", { signal: controller.signal, method: "HEAD", cache: "no-store", mode: 'no-cors', referrerPolicy: 'no-referrer' })
             .then(function() {
                 document.getElementById("laygb").style.color = "green";
             })
