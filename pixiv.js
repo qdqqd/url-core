@@ -1,3 +1,43 @@
+async function fetchBingImages() {
+    const isWideScreen = window.innerWidth > window.innerHeight;
+    const endpoint = isWideScreen ? 'https://tc.qdqqd.com/pc-images' : 'https://tc.qdqqd.com/pe-images'; 
+
+    const response = await fetch(endpoint);
+    const data = await response.json();
+    return data.data.map(image => image.url);
+}
+
+async function preloadImages(imageUrls) {
+    return new Promise((resolve, reject) => {
+        let loadedImages = 0;
+        const totalImages = imageUrls.length;
+
+        if (totalImages === 0) {
+            resolve();
+            return;
+        }
+
+        imageUrls.forEach(url => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    resolve();
+                }
+            };
+            img.onerror = () => {
+                console.error('Image failed to load:', url);
+                loadedImages++;
+                if (loadedImages === totalImages) {
+                    resolve();
+                }
+            };
+        });
+    });
+}
+
+
 async function setBackgroundImages() {
     const images = await fetchBingImages();
     
