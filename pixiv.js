@@ -48,7 +48,7 @@ async function setBackgroundImages() {
     backgroundDiv.style.left = '0';
     backgroundDiv.style.width = '100%';
     backgroundDiv.style.height = '100%';
-    backgroundDiv.style.zIndex = '-1'; // 确保在内容后面
+    backgroundDiv.style.zIndex = '-999999'; // 确保在内容后面
     document.body.appendChild(backgroundDiv);
 
     if (images.length > 0) {
