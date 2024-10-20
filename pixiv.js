@@ -1,6 +1,6 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
-    const endpoint = isWideScreen ? 'https://tc.qdqqd.com/pc-images' : 'https://tc.qdqqd.com/pe-images'; 
+    const endpoint = isWideScreen ? 'https://cors-anywhere-morning-silence-8513.fly.dev/https://api.lolicon.app/setu/v2?size=regular&num=20&aspectRatio=gt1' : 'https://cors-anywhere-morning-silence-8513.fly.dev/https://api.lolicon.app/setu/v2?size=regular&num=20&aspectRatio=lt1'; 
 
     const response = await fetch(endpoint);
     const data = await response.json();
