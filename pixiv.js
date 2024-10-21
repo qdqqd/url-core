@@ -59,7 +59,7 @@ async function setBackgroundImages() {
         currentBackgroundDiv.style.left = '0';
         currentBackgroundDiv.style.width = '100%';
         currentBackgroundDiv.style.height = '100%';
-        currentBackgroundDiv.style.zIndex = '-999999';
+        currentBackgroundDiv.style.zIndex = '-999998';
         document.body.appendChild(currentBackgroundDiv);
 
         setInterval(() => {
@@ -76,14 +76,14 @@ async function setBackgroundImages() {
             nextBackgroundDiv.style.backgroundImage = 'url(' + images[nextIndex] + ')';
             nextBackgroundDiv.style.backgroundSize = 'cover';
             nextBackgroundDiv.style.backgroundPosition = 'center';
-            nextBackgroundDiv.style.position = 'absolute';
+            nextBackgroundDiv.style.position = 'fixed';
             nextBackgroundDiv.style.top = '0';
             nextBackgroundDiv.style.left = '0';
             nextBackgroundDiv.style.width = '100%';
             nextBackgroundDiv.style.height = '100%';
             nextBackgroundDiv.style.transition = 'opacity 1s';
             nextBackgroundDiv.style.opacity = 0;
-
+            nextBackgroundDiv.style.zIndex = '-999999';
             document.body.appendChild(nextBackgroundDiv);
 
             const img = new Image();
