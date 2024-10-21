@@ -4,22 +4,41 @@ async function fetchBingImages() {
     // 定义多个 CORS 代理
     const corsProxies = [
         'https://cors.qdqqd.com/?url=',
-        'https://cors-qdqqd.vercel.app/?url=',
-        'https://cors-tube.vercel.app/?url=',
+        'https://cors-anywhere.herokuapp.com/',
+        'https://your-other-cors-proxy.com/?url='
     ];
 
-    // 随机选择一个代理
-    const randomProxy = corsProxies[Math.floor(Math.random() * corsProxies.length)];
+    // API请求URL
+    const apiUrl = isWideScreen
+        ? 'https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=gt1'
+        : 'https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=lt1';
 
-    const endpoint = isWideScreen 
-        ? `${randomProxy}https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=gt1` 
-        : `${randomProxy}https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=lt1`; 
+    for (const proxy of corsProxies) {
+        const endpoint = `${proxy}${apiUrl}`;
 
-    const response = await fetch(endpoint);
-    const data = await response.json();
+        try {
+            const response = await fetch(endpoint);
 
-    // 直接使用正确的路径，返回每个图片的 regular URL
-    return data.data.map(image => image.urls.regular);
+            if (!response.ok) {
+                throw new Error('Proxy failed or API unavailable');
+            }
+
+            const data = await response.json();
+
+            // 如果有图片返回，则处理图片URL
+            if (data.data && data.data.length > 0) {
+                return data.data.map(image => image.urls.regular);
+            } else {
+                throw new Error('No images returned from API');
+            }
+        } catch (error) {
+            console.error(`Failed to fetch images using proxy: ${proxy}`, error);
+        }
+    }
+
+    // 如果所有代理都失败，返回默认图片
+    console.warn('All proxies failed, returning default image');
+    return ['https://img.qdqqd.com/'];
 }
 
 async function preloadImages(imageUrls) {
