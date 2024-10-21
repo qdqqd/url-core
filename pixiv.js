@@ -4,8 +4,8 @@ async function fetchBingImages() {
     // 定义多个 CORS 代理
     const corsProxies = [
         'https://cors.qdqqd.com/?url=',
-        'https://cors-anywhere.herokuapp.com/',
-        'https://your-other-cors-proxy.com/?url='
+        'https://cors-qdqqd.vercel.app/?url=',
+        'https://cors-tube.vercel.app/?url=',
     ];
 
     // API请求URL
