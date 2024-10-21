@@ -1,11 +1,16 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
-    const endpoint = isWideScreen ? 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1' : 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1'; 
+    const endpoint = isWideScreen 
+        ? 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1' 
+        : 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1'; 
 
     const response = await fetch(endpoint);
     const data = await response.json();
-    return data.data.map(image => image.url);
+
+    // 直接使用正确的路径，返回每个图片的 regular URL
+    return data.data.map(image => image.urls.regular);
 }
+
 
 async function preloadImages(imageUrls) {
     return new Promise((resolve, reject) => {
