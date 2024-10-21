@@ -1,8 +1,19 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
+
+    // 定义多个 CORS 代理
+    const corsProxies = [
+        'https://cors.qdqqd.com/?url=',
+        'https://cors-qdqqd.vercel.app/?url=',
+        'https://cors-tube.vercel.app/?url=',
+    ];
+
+    // 随机选择一个代理
+    const randomProxy = corsProxies[Math.floor(Math.random() * corsProxies.length)];
+
     const endpoint = isWideScreen 
-        ? 'https://cors-qdqqd.vercel.app/?url=https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=gt1' 
-        : 'https://cors-qdqqd.vercel.app/?url=https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=lt1'; 
+        ? `${randomProxy}https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=gt1` 
+        : `${randomProxy}https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=lt1`; 
 
     const response = await fetch(endpoint);
     const data = await response.json();
@@ -10,7 +21,6 @@ async function fetchBingImages() {
     // 直接使用正确的路径，返回每个图片的 regular URL
     return data.data.map(image => image.urls.regular);
 }
-
 
 async function preloadImages(imageUrls) {
     return new Promise((resolve, reject) => {
@@ -41,7 +51,6 @@ async function preloadImages(imageUrls) {
         });
     });
 }
-
 
 async function setBackgroundImages() {
     const images = await fetchBingImages();
@@ -104,7 +113,6 @@ async function setBackgroundImages() {
         }, 8000);
     }
 }
-
 
 // 监听页面加载后执行背景切换功能
 document.addEventListener('DOMContentLoaded', setBackgroundImages);
