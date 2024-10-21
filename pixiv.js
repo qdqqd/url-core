@@ -1,8 +1,8 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
-        ? 'https://cors-qdqqd.vercel.app/?url=https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=gt1' 
-        : 'https://cors-qdqqd.vercel.app/?url=https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=lt1'; 
+        ? 'https://cors.qdqqd.com/?url=https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=gt1' 
+        : 'https://cors.qdqqd.com/?url=https://api.lolicon.app/setu/v2?size=regular&proxy=i.pixiv.nl&num=20&aspectRatio=lt1'; 
 
     const response = await fetch(endpoint);
     const data = await response.json();
