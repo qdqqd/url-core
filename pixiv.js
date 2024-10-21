@@ -41,30 +41,33 @@ async function preloadImages(imageUrls) {
 async function setBackgroundImages() {
     const images = await fetchBingImages();
     
-    // 动态创建背景容器
-    const backgroundDiv = document.createElement('div');
-    backgroundDiv.style.position = 'fixed';
-    backgroundDiv.style.top = '0';
-    backgroundDiv.style.left = '0';
-    backgroundDiv.style.width = '100%';
-    backgroundDiv.style.height = '100%';
-    backgroundDiv.style.zIndex = '-999999'; // 确保在内容后面
-    document.body.appendChild(backgroundDiv);
-
     if (images.length > 0) {
         await preloadImages(images);
 
-        backgroundDiv.style.backgroundImage = 'url(' + images[0] + ')';
-        backgroundDiv.style.backgroundSize = 'cover';
-        backgroundDiv.style.backgroundPosition = 'center';
-
         let index = 0;
-        let currentBackgroundDiv = backgroundDiv;
+        let currentBackgroundDiv = document.createElement('div');
+        currentBackgroundDiv.style.backgroundImage = 'url(' + images[0] + ')';
+        currentBackgroundDiv.style.backgroundSize = 'cover';
+        currentBackgroundDiv.style.backgroundPosition = 'center';
+        currentBackgroundDiv.style.position = 'fixed';
+        currentBackgroundDiv.style.top = '0';
+        currentBackgroundDiv.style.left = '0';
+        currentBackgroundDiv.style.width = '100%';
+        currentBackgroundDiv.style.height = '100%';
+        currentBackgroundDiv.style.zIndex = '-999999';
+        document.body.appendChild(currentBackgroundDiv);
 
         setInterval(() => {
             const nextIndex = (index + 1) % images.length;
+            console.log('Next image index:', nextIndex, 'Image URL:', images[nextIndex]); // Debugging output
+
+            if (!images[nextIndex]) {
+                console.error('Undefined image URL at index:', nextIndex);
+                index = nextIndex; // Skip to the next image
+                return;
+            }
+
             const nextBackgroundDiv = document.createElement('div');
-            nextBackgroundDiv.className = 'background next';
             nextBackgroundDiv.style.backgroundImage = 'url(' + images[nextIndex] + ')';
             nextBackgroundDiv.style.backgroundSize = 'cover';
             nextBackgroundDiv.style.backgroundPosition = 'center';
@@ -91,12 +94,12 @@ async function setBackgroundImages() {
             img.onerror = () => {
                 console.error('Failed to load image:', images[nextIndex]);
                 document.body.removeChild(nextBackgroundDiv);
-                index = (index + 1) % images.length; // 跳过失败的图片
+                index = (index + 1) % images.length; // Skip the failed image
             };
-
         }, 8000);
     }
 }
+
 
 // 监听页面加载后执行背景切换功能
 document.addEventListener('DOMContentLoaded', setBackgroundImages);
