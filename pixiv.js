@@ -3,6 +3,7 @@ async function fetchBingImages() {
 
     // 定义多个 CORS 代理
     const corsProxies = [
+        'https://i.qdqqd.com/?cors=',
         'https://cors.qdqqd.com/?url=',
         'https://cors-qdqqd.vercel.app/?url=',
         'https://cors-tube.vercel.app/?url=',
