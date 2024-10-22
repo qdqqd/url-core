@@ -63,11 +63,12 @@ async function setBackgroundImages() {
         currentBackgroundDiv.style.width = '100%';
         currentBackgroundDiv.style.height = '100%';
         currentBackgroundDiv.style.zIndex = '-999998';
+        currentBackgroundDiv.style.transition = 'opacity 2s ease-in-out'; // 平滑过渡
         document.body.appendChild(currentBackgroundDiv);
 
         setInterval(() => {
             index = (index + 1) % images.length;
-            console.log('Next image index:', index, 'Image URL:', images[index]); // Debugging output
+            console.log('Next image index:', index, 'Image URL:', images[index]);
 
             loadImage(images[index])
                 .then(() => {
@@ -80,22 +81,27 @@ async function setBackgroundImages() {
                     nextBackgroundDiv.style.left = '0';
                     nextBackgroundDiv.style.width = '100%';
                     nextBackgroundDiv.style.height = '100%';
-                    nextBackgroundDiv.style.transition = 'opacity 1s';
+                    nextBackgroundDiv.style.transition = 'opacity 3s ease-in-out'; // 平滑过渡
                     nextBackgroundDiv.style.opacity = 0;
                     nextBackgroundDiv.style.zIndex = '-999999';
                     document.body.appendChild(nextBackgroundDiv);
 
-                    nextBackgroundDiv.style.opacity = 1;
+                    // 先慢慢淡入新的背景
+                    setTimeout(() => {
+                        nextBackgroundDiv.style.opacity = 1;
+                    }, 100); 
+
+                    // 等待淡入动画结束后，移除旧的背景
                     setTimeout(() => {
                         document.body.removeChild(currentBackgroundDiv);
                         currentBackgroundDiv = nextBackgroundDiv;
-                    }, 1000);
+                    }, 3000); // 这里的时间应与 transition 的时间匹配
                 })
                 .catch(() => {
                     console.error('Failed to load image:', images[index]);
                     index = (index + 1) % images.length; 
                 });
-        }, 8000);
+        }, 10000); // 每10秒切换一次图片
     }
 }
 
