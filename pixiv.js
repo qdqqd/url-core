@@ -2,18 +2,17 @@ async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
         ? 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1' 
-        : 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1'; 
+        : 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1';
 
     const response = await fetch(endpoint);
     const data = await response.json();
 
-    // 直接使用正确的路径，返回每个图片的 regular URL
     return data.data.map(image => image.urls.regular);
 }
 
-
+// 预加载图片，确保图片准备好再进行轮播
 async function preloadImages(imageUrls) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         let loadedImages = 0;
         const totalImages = imageUrls.length;
 
@@ -42,69 +41,50 @@ async function preloadImages(imageUrls) {
     });
 }
 
-
+// 设置背景图片div并实现轮播淡入淡出
 async function setBackgroundImages() {
     const images = await fetchBingImages();
     
     if (images.length > 0) {
         await preloadImages(images);
 
-        let index = 0;
-        let currentBackgroundDiv = document.createElement('div');
-        currentBackgroundDiv.style.backgroundImage = 'url(' + images[0] + ')';
-        currentBackgroundDiv.style.backgroundSize = 'cover';
-        currentBackgroundDiv.style.backgroundPosition = 'center';
-        currentBackgroundDiv.style.position = 'fixed';
-        currentBackgroundDiv.style.top = '0';
-        currentBackgroundDiv.style.left = '0';
-        currentBackgroundDiv.style.width = '100%';
-        currentBackgroundDiv.style.height = '100%';
-        currentBackgroundDiv.style.zIndex = '-999998';
-        document.body.appendChild(currentBackgroundDiv);
+        // 创建所有图片的div并添加到页面
+        const backgroundDivs = images.map((imageUrl, i) => {
+            const div = createBackgroundDiv(imageUrl);
+            div.style.opacity = i === 0 ? 1 : 0;  // 只有第一张图片的透明度为1，其余为0
+            document.body.appendChild(div);
+            return div;
+        });
 
+        // 轮播逻辑
+        let currentIndex = 0;
         setInterval(() => {
-            const nextIndex = (index + 1) % images.length;
-            console.log('Next image index:', nextIndex, 'Image URL:', images[nextIndex]); // Debugging output
+            const nextIndex = (currentIndex + 1) % backgroundDivs.length;
 
-            if (!images[nextIndex]) {
-                console.error('Undefined image URL at index:', nextIndex);
-                index = nextIndex; // Skip to the next image
-                return;
-            }
+            backgroundDivs[currentIndex].style.opacity = 0;  // 当前图片淡出
+            backgroundDivs[nextIndex].style.opacity = 1;     // 下一张图片淡入
 
-            const nextBackgroundDiv = document.createElement('div');
-            nextBackgroundDiv.style.backgroundImage = 'url(' + images[nextIndex] + ')';
-            nextBackgroundDiv.style.backgroundSize = 'cover';
-            nextBackgroundDiv.style.backgroundPosition = 'center';
-            nextBackgroundDiv.style.position = 'fixed';
-            nextBackgroundDiv.style.top = '0';
-            nextBackgroundDiv.style.left = '0';
-            nextBackgroundDiv.style.width = '100%';
-            nextBackgroundDiv.style.height = '100%';
-            nextBackgroundDiv.style.transition = 'opacity 1s';
-            nextBackgroundDiv.style.opacity = 0;
-            nextBackgroundDiv.style.zIndex = '-999999';
-            document.body.appendChild(nextBackgroundDiv);
-
-            const img = new Image();
-            img.src = images[nextIndex];
-            img.onload = () => {
-                nextBackgroundDiv.style.opacity = 1;
-                setTimeout(() => {
-                    document.body.removeChild(currentBackgroundDiv);
-                    currentBackgroundDiv = nextBackgroundDiv;
-                    index = nextIndex;
-                }, 1000);
-            };
-            img.onerror = () => {
-                console.error('Failed to load image:', images[nextIndex]);
-                document.body.removeChild(nextBackgroundDiv);
-                index = (index + 1) % images.length; // Skip the failed image
-            };
-        }, 8000);
+            currentIndex = nextIndex;
+        }, 8000);  // 每8秒切换一次
     }
 }
 
+// 辅助函数：创建背景Div并设置初始样式
+function createBackgroundDiv(imageUrl) {
+    const div = document.createElement('div');
+    div.style.backgroundImage = `url(${imageUrl})`;
+    div.style.backgroundSize = 'cover';
+    div.style.backgroundPosition = 'center';
+    div.style.position = 'fixed';
+    div.style.top = '0';
+    div.style.left = '0';
+    div.style.width = '100%';
+    div.style.height = '100%';
+    div.style.transition = 'opacity 2s';  // 设置淡入淡出过渡
+    div.style.opacity = 0;  // 初始透明度为0
+    div.style.zIndex = '-999999';
+    return div;
+}
 
-// 监听页面加载后执行背景切换功能
+// 页面加载后执行背景切换功能
 document.addEventListener('DOMContentLoaded', setBackgroundImages);
