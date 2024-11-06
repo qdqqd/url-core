@@ -1,0 +1,6 @@
+ipv4-cfyx.qdqqd.com:443#柯艺云ipv4
+ipv6-cfyx.qdqqd.com:443#柯艺云ipv6
+xui.sheji.ge:443#妖火-三网优选
+cf.090227.xyz:443#cm-三网优选
+cfip.xxxxxxxx.tk:443#OTC提供维护官方优选
+cfyx-ys.qdqqd.com:443#路由器本地优选
