@@ -3,8 +3,8 @@ async function fetchBingImages() {
     const endpoint = isWideScreen 
      //   ? 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org' 
      //   : 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
- ? 'https://thingproxy.freeboard.io/fetch/https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org'
- : 'https://thingproxy.freeboard.io/fetch/https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
+ ? 'https://i.qdqqd.com/?cors=https://thingproxy.freeboard.io/fetch/https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org'
+ : 'https://i.qdqqd.com/?cors=https://thingproxy.freeboard.io/fetch/https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
     
     const response = await fetch(endpoint);
     const data = await response.json();
