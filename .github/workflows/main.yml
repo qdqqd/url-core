@@ -19,3 +19,6 @@ jobs:
           curl https://www.baidu.com/link?url=k6MpuxpsfWu1q3XbJqMf31xdnRFZlPLI0XofqdrtMtG&wd=柯艺云&eqid=c138d464000f60670000000564b37e14
           curl https://www.baidu.com/link?url=eI3xWiks2lvVhUQD2SghshXfGu4ArJbOF_3x_kGsjKW&wd=柯艺云&eqid=94451128000264490000000564b0ceb6
           curl https://www.qdqqd.com/
+          curl https://s.qdqqd.com/
+          curl https://tc.qdqqd.com/
+          curl https://dwz.qdqqd.com/
