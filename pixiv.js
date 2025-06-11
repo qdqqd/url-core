@@ -1,21 +1,34 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
-        ? 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org' 
-        : 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
+        ? 'https://api.lolicon.app/setu/v2?size=regular&num=20&aspectRatio=gt1&proxy=i.pximg.org' 
+        : 'https://api.lolicon.app/setu/v2?size=regular&num=20&aspectRatio=lt1&proxy=i.pximg.org';
+    //    ? 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org' 
+     //   : 'https://api.allorigins.win/raw?url=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
 // ? 'https://thingproxy.freeboard.io/fetch/https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org'
 // : 'https://thingproxy.freeboard.io/fetch/https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
  //    ? 'https://image.anosu.top/pixiv/json?num=20&proxy=i.pximg.org&size=regular'
 // : 'https://image.anosu.top/pixiv/json?num=20&proxy=i.pximg.org&size=regular';
-    const response = await fetch(endpoint);
+    // 设置请求头，伪装Referer
+    const headers = {
+        'Referer': 'https://api.lolicon.app',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    };
+
+    const response = await fetch(endpoint, {
+        method: 'GET',
+        headers: headers
+    });
+
     const data = await response.json();
 
-    // 新接口处理方式 - 直接返回url数组
-  //  return data.map(item => item.url);
-    
-    // 旧接口处理方式（保留但注释掉）
-     return data.data.map(image => image.urls.regular);
+    // 返回图片的URL数组
+    return data.data.map(image => image.urls.regular);
 }
+
+
+
+
 
 // 预加载图片，确保图片准备好再进行轮播
 async function preloadImages(imageUrls) {
