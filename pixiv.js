@@ -1,12 +1,12 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
-        ? 'https://api.lolicon.app/setu/v2?size=regular&num=20&aspectRatio=gt1&proxy=i.pximg.org' 
-        : 'https://api.lolicon.app/setu/v2?size=regular&num=20&aspectRatio=lt1&proxy=i.pximg.org';
+        ? 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org' 
+        : 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
     
     // 设置请求头，伪装Referer
     const headers = {
-        'Referer': 'https://api.lolicon.app',
+       // 'Referer': 'https://api.lolicon.app',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     };
 
