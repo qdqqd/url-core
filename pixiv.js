@@ -1,3 +1,5 @@
+//作者：by柯乐
+
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
@@ -8,7 +10,7 @@ async function fetchBingImages() {
        // 'Referer': 'https://api.lolicon.app',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     };
-
+ 
     try {
         const response = await fetch(endpoint, {
             method: 'GET',
@@ -65,14 +67,20 @@ async function preloadImages(imageUrls) {
 }
 
 const effects = [
-  { name: 'fade', init: div => { div.style.opacity='0'; div.style.transform=''; div.style.filter=''; }, transition: 'opacity 1.8s cubic-bezier(0.16,0.85,0.3,1)', apply: div => div.style.opacity='1' },
-  { name: 'elastic-slide', init: div => { div.style.transform='translateX(-120%)'; div.style.opacity='1'; div.style.filter=''; }, transition: 'transform 1.5s cubic-bezier(0.68,-0.6,0.32,1.6)', apply: div => div.style.transform='translateX(0)' },
-  { name: 'parallax-3d', init: div => { div.style.transform='perspective(1000px) rotateY(15deg) translateX(30%)'; div.style.opacity='0.8'; div.style.filter=''; }, transition: 'transform 1.6s ease, opacity 1.6s ease', apply: div => { div.style.transform='perspective(1000px) rotateY(0deg) translateX(0)'; div.style.opacity='1'; } },
-  { name: 'motion-blur', init: div => { div.style.filter='blur(15px)'; div.style.opacity='0'; div.style.transform=''; }, transition: 'filter 1.4s ease, opacity 1.4s ease', apply: div => { div.style.filter='blur(0)'; div.style.opacity='1'; } },
-  { name: 'glass-break', init: div => { div.style.clipPath='polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%)'; div.style.transform='scale(1.3)'; div.style.opacity='0'; div.style.filter=''; }, transition: 'all 1.8s cubic-bezier(0.7,0,0.3,1)', apply: div => { div.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)'; div.style.transform='scale(1)'; div.style.opacity='1'; } },
-  { name: 'soft-zoom', init: div => { div.style.transform='scale(0.92)'; div.style.opacity='0'; div.style.filter=''; }, transition: 'transform 1.5s cubic-bezier(0.18,0.89,0.32,1.28), opacity 1.5s ease', apply: div => { div.style.transform='scale(1)'; div.style.opacity='1'; } },
-  { name: 'diagonal-wipe', init: div => { div.style.clipPath='polygon(0 0,0 0,100% 100%,100% 100%)'; div.style.opacity='1'; div.style.transform=''; }, transition: 'clip-path 1.6s cubic-bezier(0.77,0,0.18,1)', apply: div => div.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)' }
+  { name:'fade',          init:d=>d.style.cssText=baseCSS+'opacity:0;transform:;filter:;', transition:'opacity 1.8s cubic-bezier(0.16,0.85,0.3,1)',            apply:d=>d.style.opacity='1' },
+  { name:'elastic-slide', init:d=>d.style.cssText=baseCSS+'transform:translateX(-120%);opacity:1;filter:;', transition:'transform 1.5s cubic-bezier(0.68,-0.6,0.32,1.6)', apply:d=>d.style.transform='translateX(0)' },
+  { name:'parallax-3d',   init:d=>d.style.cssText=baseCSS+'transform:perspective(1000px) rotateY(15deg) translateX(30%);opacity:0.8;filter:;', transition:'transform 1.6s ease,opacity 1.6s ease',  apply:d=>{ d.style.transform='perspective(1000px) rotateY(0) translateX(0)'; d.style.opacity='1'; } },
+  { name:'motion-blur',   init:d=>d.style.cssText=baseCSS+'filter:blur(15px);opacity:0;transform:;', transition:'filter 1.4s ease,opacity 1.4s ease',                            apply:d=>{ d.style.filter='blur(0)'; d.style.opacity='1'; } },
+  { name:'glass-break',   init:d=>d.style.cssText=baseCSS+'clip-path:polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%);transform:scale(1.3);opacity:0;filter:;', transition:'all 1.8s cubic-bezier(0.7,0,0.3,1)', apply:d=>{ d.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)'; d.style.transform='scale(1)'; d.style.opacity='1'; } },
+  { name:'soft-zoom',     init:d=>d.style.cssText=baseCSS+'transform:scale(0.92);opacity:0;filter:;', transition:'transform 1.5s cubic-bezier(0.18,0.89,0.32,1.28),opacity 1.5s ease', apply:d=>{ d.style.transform='scale(1)'; d.style.opacity='1'; } },
+  { name:'diagonal-wipe', init:d=>d.style.cssText=baseCSS+'clip-path:polygon(0 0,0 0,100% 100%,100% 100%);opacity:1;transform:;', transition:'clip-path 1.6s cubic-bezier(0.77,0,0.18,1)',            apply:d=>d.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)' },
+  { name:'firefly-glow',  init:d=>d.style.cssText=baseCSS+'filter:brightness(1);opacity:0.7;transform:scale(1);',       transition:'filter 1s ease-in-out,opacity 1s ease-in-out,transform 1s ease-in-out',   apply:d=>d.style.cssText+='filter:brightness(2);opacity:1;transform:scale(1.05);' },
+  { name:'spin-zoom',     init:d=>d.style.cssText=baseCSS+'transform:rotate(-45deg) scale(0.8);opacity:0;',            transition:'transform 1.2s ease-out,opacity 1.2s ease-out',                       apply:d=>d.style.cssText+='transform:rotate(0deg) scale(1);opacity:1;' },
+  { name:'ripple',        init:d=>d.style.cssText=baseCSS+'clip-path:circle(0% at 50% 50%);opacity:0.8;',         transition:'clip-path 1.5s ease,opacity 1.5s ease',                               apply:d=>d.style.cssText+='clip-path:circle(150% at 50% 50%);opacity:1;' },
+  { name:'neon-pulse',    init:d=>d.style.cssText=baseCSS+'box-shadow:0 0 20px rgba(0,255,255,0.5);opacity:0.6;', transition:'box-shadow 1s ease-in-out,opacity 1s ease-in-out',                     apply:d=>d.style.cssText+='box-shadow:0 0 40px rgba(0,255,255,1);opacity:1;' },
+  { name:'matrix-rain',   init:d=>d.style.animation='matrixRain 3s linear forwards',                             transition:'',                                                                     apply:d=>{} }
 ];
+
 
 // 基础样式
 const baseCSS = `
@@ -136,4 +144,44 @@ async function setBackgroundImages() {
   }, intervalTime);
 }
 
-document.addEventListener('DOMContentLoaded', setBackgroundImages);
+// 动态注入 @keyframes 矩阵雨动画依赖
+function injectKeyframes() {
+  const style = document.createElement('style');
+  style.type = 'text/css';
+  style.textContent = `
+    @keyframes matrixRain {
+      0% {
+        background-position: 0 0;
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        background-position: 0 200%;
+        opacity: 0;
+      }
+    }
+    @keyframes neonPulse {
+      0% {
+        box-shadow: 0 0 20px rgba(0,255,255,0.5);
+        opacity: 0.6;
+      }
+      50% {
+        box-shadow: 0 0 40px rgba(0,255,255,1);
+        opacity: 1;
+      }
+      100% {
+        box-shadow: 0 0 20px rgba(0,255,255,0.5);
+        opacity: 0.6;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  injectKeyframes();
+  setBackgroundImages();
+});
+
