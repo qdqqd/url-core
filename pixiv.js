@@ -1,10 +1,9 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
-        ? 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dgt1%26proxy%3Di.pximg.org' 
-        : 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D20%26aspectRatio%3Dlt1%26proxy%3Di.pximg.org';
+        ? 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D7%26aspectRatio%3Dgt1' 
+        : 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D7%26aspectRatio%3Dlt1';
     
-    // 设置请求头，伪装Referer
     const headers = {
        // 'Referer': 'https://api.lolicon.app',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -26,7 +25,7 @@ async function fetchBingImages() {
         if (data.data && data.data.length > 0) {
             return data.data.map(image => image.urls.regular);
         } else {
-            throw new Error('API未返回任何图像');
+            return ['https://img.qdqqd.com/?1','https://img.qdqqd.com/?2'];
         }
     } catch (error) {
         console.error('使用回退映像从API获取映像时出错:', error);
@@ -37,7 +36,7 @@ async function fetchBingImages() {
     }
 }
 
-// 预加载图片，确保图片准备好再进行轮播
+
 async function preloadImages(imageUrls) {
     return new Promise((resolve) => {
         let loadedImages = 0;
@@ -68,50 +67,76 @@ async function preloadImages(imageUrls) {
     });
 }
 
-// 设置背景图片div并实现轮播淡入淡出
+const effects = [
+  { name: 'fade', init: div => { div.style.opacity='0'; div.style.transform=''; div.style.filter=''; }, transition: 'opacity 1.8s cubic-bezier(0.16,0.85,0.3,1)', apply: div => div.style.opacity='1' },
+  { name: 'elastic-slide', init: div => { div.style.transform='translateX(-120%)'; div.style.opacity='1'; div.style.filter=''; }, transition: 'transform 1.5s cubic-bezier(0.68,-0.6,0.32,1.6)', apply: div => div.style.transform='translateX(0)' },
+  { name: 'parallax-3d', init: div => { div.style.transform='perspective(1000px) rotateY(15deg) translateX(30%)'; div.style.opacity='0.8'; div.style.filter=''; }, transition: 'transform 1.6s ease, opacity 1.6s ease', apply: div => { div.style.transform='perspective(1000px) rotateY(0deg) translateX(0)'; div.style.opacity='1'; } },
+  { name: 'motion-blur', init: div => { div.style.filter='blur(15px)'; div.style.opacity='0'; div.style.transform=''; }, transition: 'filter 1.4s ease, opacity 1.4s ease', apply: div => { div.style.filter='blur(0)'; div.style.opacity='1'; } },
+  { name: 'glass-break', init: div => { div.style.clipPath='polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%)'; div.style.transform='scale(1.3)'; div.style.opacity='0'; div.style.filter=''; }, transition: 'all 1.8s cubic-bezier(0.7,0,0.3,1)', apply: div => { div.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)'; div.style.transform='scale(1)'; div.style.opacity='1'; } },
+  { name: 'soft-zoom', init: div => { div.style.transform='scale(0.92)'; div.style.opacity='0'; div.style.filter=''; }, transition: 'transform 1.5s cubic-bezier(0.18,0.89,0.32,1.28), opacity 1.5s ease', apply: div => { div.style.transform='scale(1)'; div.style.opacity='1'; } },
+  { name: 'diagonal-wipe', init: div => { div.style.clipPath='polygon(0 0,0 0,100% 100%,100% 100%)'; div.style.opacity='1'; div.style.transform=''; }, transition: 'clip-path 1.6s cubic-bezier(0.77,0,0.18,1)', apply: div => div.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)' }
+];
+
+// 基础样式
+const baseCSS = `
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: -999999;
+`;
+
+// 切换间隔（毫秒）
+const intervalTime = 8000;
+
+
+async function preloadAndFilter(urls) {
+  const results = await Promise.all(urls.map(url => new Promise(resolve => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => resolve({url, ok: true});
+    img.onerror = () => resolve({url, ok: false});
+  })));
+  return results.filter(r => r.ok).map(r => r.url);
+}
+
+
+function animateNext(div, imageUrl) {
+  div.style.transition = '';
+  div.style.cssText = baseCSS + `background-image:url(${imageUrl});`;
+  const ef = effects[Math.floor(Math.random() * effects.length)];
+  ef.init(div);
+  void div.offsetWidth;
+  div.style.transition = ef.transition;
+  requestAnimationFrame(() => ef.apply(div));
+}
+
+
 async function setBackgroundImages() {
-    const images = await fetchBingImages();
-    
-    if (images.length > 0) {
-        await preloadImages(images);
+  const urls = await fetchBingImages();
+  if (!urls.length) return;
 
-        // 创建所有图片的div并添加到页面
-        const backgroundDivs = images.map((imageUrl, i) => {
-            const div = createBackgroundDiv(imageUrl);
-            div.style.opacity = i === 0 ? 1 : 0;  // 只有第一张图片的透明度为1，其余为0
-            document.body.appendChild(div);
-            return div;
-        });
+  // 过滤掉404或加载失败的链接
+  const validUrls = await preloadAndFilter(urls);
+  if (!validUrls.length) return;
 
-        // 轮播逻辑
-        let currentIndex = 0;
-        setInterval(() => {
-            const nextIndex = (currentIndex + 1) % backgroundDivs.length;
+  // 创建背景层
+  const divs = validUrls.map((url, idx) => {
+    const d = document.createElement('div');
+    d.style.cssText = baseCSS + `background-image:url(${url}); opacity:${idx===0?1:0}`;
+    document.body.appendChild(d);
+    return d;
+  });
 
-            backgroundDivs[currentIndex].style.opacity = 0;  // 当前图片淡出
-            backgroundDivs[nextIndex].style.opacity = 1;     // 下一张图片淡入
-
-            currentIndex = nextIndex;
-        }, 8000);  // 每8秒切换一次
-    }
+  let curr = 0;
+  setInterval(() => {
+    const next = (curr + 1) % divs.length;
+    divs[curr].style.opacity = '0';
+    divs[next].style.opacity = '1';
+    animateNext(divs[next], validUrls[next]);
+    curr = next;
+  }, intervalTime);
 }
 
-// 辅助函数：创建背景Div并设置初始样式
-function createBackgroundDiv(imageUrl) {
-    const div = document.createElement('div');
-    div.style.backgroundImage = `url(${imageUrl})`;
-    div.style.backgroundSize = 'cover';
-    div.style.backgroundPosition = 'center';
-    div.style.position = 'fixed';
-    div.style.top = '0';
-    div.style.left = '0';
-    div.style.width = '100%';
-    div.style.height = '100%';
-    div.style.transition = 'opacity 2s';  // 设置淡入淡出过渡
-    div.style.opacity = 0;  // 初始透明度为0
-    div.style.zIndex = '-999999';
-    return div;
-}
-
-// 页面加载后执行背景切换功能
 document.addEventListener('DOMContentLoaded', setBackgroundImages);
