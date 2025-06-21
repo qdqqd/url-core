@@ -16,7 +16,7 @@ async function fetchBingImages() {
         });
 
         if (!response.ok) {
-            throw new Error('网络响应不正常');
+            return ['https://img.qdqqd.com/?1','https://img.qdqqd.com/?2'];
         }
 
         const data = await response.json();
@@ -29,10 +29,7 @@ async function fetchBingImages() {
         }
     } catch (error) {
         console.error('使用回退映像从API获取映像时出错:', error);
-        return [
-            'https://img.qdqqd.com/?1',
-            'https://img.qdqqd.com/?2'
-        ];
+            return ['https://img.qdqqd.com/?1','https://img.qdqqd.com/?2'];
     }
 }
 
