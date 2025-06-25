@@ -42,20 +42,133 @@ const baseCSS = `
 `;
 const intervalTime = 8000;
 
-const effects=[
-  {name:'fade',duration:1800,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});opacity:0;`,transition:'opacity 1.8s cubic-bezier(0.16,0.85,0.3,1)',apply:d=>d.style.opacity='1'},
-  {name:'elastic-slide',duration:1500,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});transform:translateX(-120%);opacity:1;`,transition:'transform 1.5s cubic-bezier(0.68,-0.6,0.32,1.6)',apply:d=>d.style.transform='translateX(0)'},
-  {name:'parallax-3d',duration:1600,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});transform:perspective(1000px) rotateY(15deg) translateX(30%);opacity:0.8;`,transition:'transform 1.6s ease,opacity 1.6s ease',apply:d=>{d.style.transform='perspective(1000px) rotateY(0) translateX(0)';d.style.opacity='1'}},
-  {name:'motion-blur',duration:1400,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});filter:blur(15px);opacity:0;`,transition:'filter 1.4s ease,opacity 1.4s ease',apply:d=>{d.style.filter='blur(0)';d.style.opacity='1'}},
-  {name:'glass-break',duration:1800,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});clip-path:polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%);transform:scale(1.3);opacity:0;`,transition:'all 1.8s cubic-bezier(0.7,0,0.3,1)',apply:d=>{d.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)';d.style.transform='scale(1)';d.style.opacity='1'}},
-  {name:'soft-zoom',duration:1500,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});transform:scale(0.92);opacity:0;`,transition:'transform 1.5s cubic-bezier(0.18,0.89,0.32,1.28),opacity 1.5s ease',apply:d=>{d.style.transform='scale(1)';d.style.opacity='1'}},
-  {name:'diagonal-wipe',duration:1600,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});clip-path:polygon(0 0,0 0,100% 100%,100% 100%);opacity:1;`,transition:'clip-path 1.6s cubic-bezier(0.77,0,0.18,1)',apply:d=>d.style.clipPath='polygon(0 0,100% 0,100% 100%,0 100%)'},
-  {name:'firefly-glow',duration:1000,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});filter:brightness(1);opacity:0.7;transform:scale(1);`,transition:'filter 1s ease-in-out,opacity 1s ease-in-out,transform 1s ease-in-out',apply:d=>d.style.cssText+=`filter:brightness(2);opacity:1;transform:scale(1.05);`},
-  {name:'spin-zoom',duration:1200,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});transform:rotate(-45deg) scale(0.8);opacity:0;`,transition:'transform 1.2s ease-out,opacity 1.2s ease-out',apply:d=>d.style.cssText+=`transform:rotate(0deg) scale(1);opacity:1;`},
-  {name:'ripple',duration:1500,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});clip-path:circle(0% at 50% 50%);opacity:0.8;`,transition:'clip-path 1.5s ease,opacity 1.5s ease',apply:d=>d.style.cssText+=`clip-path:circle(150% at 50% 50%);opacity:1;`},
-  {name:'neon-pulse',duration:1000,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});box-shadow:0 0 20px rgba(0,255,255,0.5);opacity:0.6;`,transition:'box-shadow 1s ease-in-out,opacity 1s ease-in-out',apply:d=>d.style.cssText+=`box-shadow:0 0 40px rgba(0,255,255,1);opacity:1;`},
-  {name:'matrix-rain',duration:3000,init:(d,url)=>d.style.cssText=baseCSS+`background-image:url(${url});animation:matrixRain 3s linear forwards;`,transition:'',apply:d=>{}}
-  ];
+const effects = [
+  { 
+    name: 'fade',
+    duration: 1800,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});opacity:0;`,
+    transition: 'opacity 1.8s cubic-bezier(0.16,0.85,0.3,1)',
+    apply: d => d.style.opacity = '1'
+  },
+  { 
+    name: 'elastic-slide',
+    duration: 1500,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform:translateX(-120%);opacity:1;`,
+    transition: 'transform 1.5s cubic-bezier(0.68,-0.6,0.32,1.6)',
+    apply: d => d.style.transform = 'translateX(0)'
+  },
+  { 
+    name: 'parallax-3d',
+    duration: 1600,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform:perspective(1000px) rotateY(15deg) translateX(30%);opacity:0.8;`,
+    transition: 'transform 1.6s ease,opacity 1.6s ease',
+    apply: d => {
+      d.style.transform = 'perspective(1000px) rotateY(0) translateX(0)';
+      d.style.opacity = '1';
+    }
+  },
+  { 
+    name: 'glass-break',
+    duration: 1800,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});clip-path:polygon(20% 0%,80% 0%,100% 20%,100% 80%,80% 100%,20% 100%,0% 80%,0% 20%);transform:scale(1.3);opacity:0;`,
+    transition: 'all 1.8s cubic-bezier(0.7,0,0.3,1)',
+    apply: d => {
+      d.style.clipPath = 'polygon(0 0,100% 0,100% 100%,0 100%)';
+      d.style.transform = 'scale(1)';
+      d.style.opacity = '1';
+    }
+  },
+  { 
+    name: 'soft-zoom',
+    duration: 1500,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform:scale(0.92);opacity:0;`,
+    transition: 'transform 1.5s cubic-bezier(0.18,0.89,0.32,1.28),opacity 1.5s ease',
+    apply: d => {
+      d.style.transform = 'scale(1)';
+      d.style.opacity = '1';
+    }
+  },
+  { 
+    name: 'diagonal-wipe',
+    duration: 1600,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});clip-path:polygon(0 0,0 0,100% 100%,100% 100%);opacity:1;`,
+    transition: 'clip-path 1.6s cubic-bezier(0.77,0,0.18,1)',
+    apply: d => d.style.clipPath = 'polygon(0 0,100% 0,100% 100%,0 100%)'
+  },
+  { 
+    name: 'spin-zoom',
+    duration: 1200,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform:rotate(-45deg) scale(0.8);opacity:0;`,
+    transition: 'transform 1.2s ease-out,opacity 1.2s ease-out',
+    apply: d => d.style.cssText += `transform:rotate(0deg) scale(1);opacity:1;`
+  },
+  { 
+    name: 'ripple',
+    duration: 1500,
+    init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});clip-path:circle(0% at 50% 50%);opacity:0.8;`,
+    transition: 'clip-path 1.5s ease,opacity 1.5s ease',
+    apply: d => d.style.cssText += `clip-path:circle(150% at 50% 50%);opacity:1;`
+  },
+    // 翻转入场
+{
+  name: 'flip',
+  duration: 1200,
+  init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform: rotateY(90deg);opacity:0;`,
+  transition: 'transform 1.2s ease-out, opacity 1.2s ease-out',
+  apply: d => {
+    d.style.transform = 'rotateY(0deg)';
+    d.style.opacity = '1';
+  }
+},
+// 从下方滑入
+{
+  name: 'slide-up',
+  duration: 1000,
+  init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform: translateY(100%);opacity:0;`,
+  transition: 'transform 1s cubic-bezier(0.25,0.8,0.25,1), opacity 1s ease',
+  apply: d => {
+    d.style.transform = 'translateY(0)';
+    d.style.opacity = '1';
+  }
+},
+// 倾斜平移
+{
+  name: 'skew-pan',
+  duration: 1400,
+  init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform: skewX(25deg) translateX(-30%);opacity:0;`,
+  transition: 'transform 1.4s ease, opacity 1.4s ease',
+  apply: d => {
+    d.style.transform = 'skewX(0deg) translateX(0)';
+    d.style.opacity = '1';
+  }
+},
+// 缩放旋转入场
+{
+  name: 'zoom-rotate',
+  duration: 1300,
+  init: (d, url) => d.style.cssText = baseCSS + `background-image:url(${url});transform: scale(0.6) rotate(-30deg);opacity:0;`,
+  transition: 'transform 1.3s cubic-bezier(0.17,0.67,0.83,0.67), opacity 1.3s ease',
+  apply: d => {
+    d.style.transform = 'scale(1) rotate(0deg)';
+    d.style.opacity = '1';
+  }
+},
+// 翻页效果
+{
+  name: 'page-flip',
+  duration: 1500,
+  init: (d, url) => {
+    d.style.cssText = baseCSS + `background-image:url(${url});transform-origin: left center;transform: perspective(600px) rotateY(-90deg);opacity:0;`;
+  },
+  transition: 'transform 1.5s ease-out, opacity 1.5s ease-out',
+  apply: d => {
+    d.style.transform = 'perspective(600px) rotateY(0deg)';
+    d.style.opacity = '1';
+  }
+}
+
+];
+
 
 function animateNext(div, imageUrl) {
   div.style.transition = '';        
@@ -95,25 +208,7 @@ setInterval(() => {
 }, intervalTime);
 }
 
-// —— 注入特效 keyframes（若有矩阵雨/霓虹等） —— 
-function injectKeyframes() {
-  const style = document.createElement('style');
-style.textContent = `
-    @keyframes matrixRain {
-      0% { background-position: 0 0; opacity: 0; }
-      50% { opacity: 1; }
-      100% { background-position: 0 200%; opacity: 0; }
-    }
-    @keyframes neonPulse {
-      0% { box-shadow: 0 0 20px rgba(0,255,255,0.5); opacity: 0.6; }
-      50% { box-shadow: 0 0 40px rgba(0,255,255,1); opacity: 1; }
-      100% { box-shadow: 0 0 20px rgba(0,255,255,0.5); opacity: 0.6; }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  injectKeyframes();
+
   setBackgroundImages();
 });
