@@ -3,8 +3,8 @@
 async function fetchBingImages() {
     const isWideScreen = window.innerWidth > window.innerHeight;
     const endpoint = isWideScreen 
-        ? 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D7%26aspectRatio%3Dgt1' 
-        : 'https://i.qdqqd.com/?cors=https%3A%2F%2Fapi.lolicon.app%2Fsetu%2Fv2%3Fsize%3Dregular%26num%3D7%26aspectRatio%3Dlt1';
+        ? 'https://s.qdqqd.com/pc_pixiv.json' 
+        : 'https://s.qdqqd.com/pe_pixiv.json';
     
     const headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
