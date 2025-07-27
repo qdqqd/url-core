@@ -1,29 +1,24 @@
-name: Scheduled Requests
+name: Scheduled Cleanup
 
 on:
   schedule:
-    - cron: '*/5 * * * *'          
-    - cron: '55 20 * * *'          # 每天中国时间 4:59（对应 UTC 时间）
+    - cron: '*/59 * * * *'  # 每 59 分钟执行一次（UTC 时间）
 
 jobs:
-  request:
+  conditional-cleanup:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Make multiple HTTP requests
-        run: |
-          curl https://www.google.com/url?sa=t&rct=j&q=柯艺云&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwiKq_qR15SAAxUjbfUHHc5PBfIQFnoECBkQAQ&url=https%3A%2F%2Fwww.qdqqd.com%2F&usg=AOvVaw1Q5rfvekYu3ENZQRBgxm6g&opi=89978449
-          curl https://www.baidu.com/link?url=k6MpuxpsfWu1q3XbJqMf31xdnRFZlPLI0XofqdrtMtG&wd=柯艺云&eqid=c138d464000f60670000000564b37e14
-          curl https://www.baidu.com/link?url=eI3xWiks2lvVhUQD2SghshXfGu4ArJbOF_3x_kGsjKW&wd=柯艺云&eqid=94451128000264490000000564b0ceb6
-          curl https://cn.bing.com/search?q=%E6%9F%AF%E8%89%BA%E4%BA%91
-
-  daily-cleanup:
-    runs-on: ubuntu-latest
-    if: github.event.schedule == '59 20 * * *'
-    steps:
-      - name: Daily cleanup at 4:59 CST with timestamp
+      - name: Conditional cleanup at 4 AM CST
         run: |
           timestamp=$(date +%s)
-          curl "https://tc.qdqqd.com/cleanupwc?time=$timestamp"
+          hour_cst=$(TZ=Asia/Shanghai date +%H)
+
+          echo "当前北京时间小时数：$hour_cst"
+
+          if [ "$hour_cst" = "04" ]; then
+            echo "当前为凌晨 4 点，开始执行清理请求..."
+            response=$(curl -s "https://tc.qdqqd.com/cleanupwc?time=$timestamp")
+            echo "清理接口响应：$response"
+          else
+            echo "非凌晨 4 点，跳过清理请求。"
+          fi
