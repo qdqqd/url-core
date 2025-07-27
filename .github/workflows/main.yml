@@ -1,4 +1,4 @@
-name: Scheduled Cleanup
+name: Cleanup
 
 on:
   schedule:
