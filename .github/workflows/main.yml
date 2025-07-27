@@ -2,8 +2,8 @@ name: Scheduled Requests
 
 on:
   schedule:
-    - cron: '*/1 * * * *'          # 每分钟请求一次（用于其他请求）
-    - cron: '59 20 * * *'          # 每天中国时间 4:59（对应 UTC 时间）
+    - cron: '*/5 * * * *'          
+    - cron: '55 20 * * *'          # 每天中国时间 4:59（对应 UTC 时间）
 
 jobs:
   request:
