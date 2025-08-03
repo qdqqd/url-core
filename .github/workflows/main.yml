@@ -2,7 +2,7 @@ name: Cleanup
 
 on:
   schedule:
-    - cron: '*/59 * * * *'  # 每 59 分钟执行一次（UTC 时间）
+    - cron: '50 20 * * 2'  
 
 jobs:
   conditional-cleanup:
