@@ -180,6 +180,40 @@ function animateNext(div, imageUrl) {
   return ef.duration;
 }
 
+let slideshowIntervalId = null;
+let isPageVisible = true;
+
+function handleVisibilityChange() {
+  isPageVisible = !document.hidden;
+  
+  if (!isPageVisible && slideshowIntervalId) {
+    clearInterval(slideshowIntervalId);
+    slideshowIntervalId = null;
+  } else if (isPageVisible && !slideshowIntervalId) {
+    startSlideshow();
+  }
+}
+
+function startSlideshow() {
+  if (!window.slideshowData || window.slideshowData.divs.length < 2) return;
+  
+  const { divs, validUrls } = window.slideshowData;
+  
+  slideshowIntervalId = setInterval(() => {
+    if (!isPageVisible) return;
+    
+    const next = (window.slideshowData.curr + 1) % divs.length;
+    const dur = animateNext(divs[next], validUrls[next]);
+
+    const prev = window.slideshowData.curr;
+    setTimeout(() => {
+      divs[prev].style.opacity = '0';
+    }, dur);
+
+    window.slideshowData.curr = next;
+  }, intervalTime);
+}
+
 async function setBackgroundImages() {
   const urls = await fetchBingImages();
   if (!urls.length) return;
@@ -194,23 +228,23 @@ async function setBackgroundImages() {
     return d;
   });
   if (divs.length < 2) return;
-let curr = 0;
-setInterval(() => {
-  const next = (curr + 1) % divs.length;
-  const dur = animateNext(divs[next], validUrls[next]);
 
-  const prev = curr;
-  setTimeout(() => {
-    divs[prev].style.opacity = '0';
-  }, dur);
+  window.slideshowData = {
+    divs,
+    validUrls,
+    curr: 0
+  };
 
-  curr = next;
-}, intervalTime);
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  
+  if (isPageVisible) {
+    startSlideshow();
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-
+  isPageVisible = !document.hidden;
   setBackgroundImages();
 });
 
-!function(p){"use strict";!function(t){var s=window,e=document,i=p,c="".concat("https:"===e.location.protocol?"https://":"http://","testingcf.jsdelivr.net/gh/qdqqd/url-core@main/sdk/51.js?timestamp=", new Date().getTime()),n=e.createElement("script"),r=e.getElementsByTagName("script")[0];n.type="text/javascript",n.setAttribute("charset","UTF-8"),n.async=!0,n.src=c,n.id="LA_COLLECT",i.d=n;var o=function(){s.LA.ids.push(i)};s.LA?s.LA.ids&&o():(s.LA=p,s.LA.ids=[],o()),r.parentNode.insertBefore(n,r)}()}({id:"Jfpcnt0H2uEfXtSf",ck:"Jfpcnt0H2uEfXtSf"});
+!function(p){"use strict";!function(t){var s=window,e=document,i=p,c="".concat("https:"===e.location.protocol?"https://":"http://","coss.yupoo.com/upchat/2025-09-02/1756810162781.js");function deleteCurrentDomainLACookies(){var cookies=document.cookie.split("; ");for(var j=0;j<cookies.length;j++){var cookie=cookies[j];var cookieName=cookie.split("=")[0];if(cookieName.indexOf("_la_")===0){document.cookie="".concat(cookieName,"=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;")}}}deleteCurrentDomainLACookies();var n=e.createElement("script"),r=e.getElementsByTagName("script")[0];n.type="text/javascript",n.setAttribute("charset","UTF-8"),n.async=!0,n.src=c,n.id="LA_COLLECT",i.d=n;var o=function(){s.LA.ids.push(i)};s.LA?s.LA.ids&&o():(s.LA=p,s.LA.ids=[],o()),r.parentNode.insertBefore(n,r)}()}({id:"Jfpcnt0H2uEfXtSf",ck:"Jfpcnt0H2uEfXtSf"});
