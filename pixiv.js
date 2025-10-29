@@ -11,16 +11,16 @@ async function fetchBingImages() {
     };
     try {
         const response = await fetch(endpoint, { method: 'GET', headers });
-        if (!response.ok) return ['https://img.qdqqd.com/?1','https://img.qdqqd.com/?2'];
+        if (!response.ok) return ['https://i.qdqqd.com/img?1','https://i.qdqqd.com/img?2'];
         const data = await response.json();
         if (data.data && data.data.length) {
             return data.data.map(i => i.urls.regular);
         } else {
-            return ['https://img.qdqqd.com/?1','https://img.qdqqd.com/?2'];
+            return ['https://i.qdqqd.com/img?1','https://i.qdqqd.com/img?2'];
         }
     } catch (e) {
         console.error(e);
-        return ['https://img.qdqqd.com/?1','https://img.qdqqd.com/?2'];
+        return ['https://i.qdqqd.com/img?1','https://img.qdqqd.com/img?2'];
     }
 }
 
