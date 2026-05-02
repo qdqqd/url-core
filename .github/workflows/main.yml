@@ -1,24 +1,38 @@
-name: Cleanup
+name: Download JS Files
 
 on:
   schedule:
-    - cron: '50 20 * * 2'  
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  conditional-cleanup:
+  download:
     runs-on: ubuntu-latest
     steps:
-      - name: Conditional cleanup at 4 AM CST
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download 51.la JS SDK
         run: |
-          timestamp=$(date +%s)
-          hour_cst=$(TZ=Asia/Shanghai date +%H)
+          mkdir -p 51
+          curl -fsSL -o 51/1.js https://sdk.51.la/js-sdk-pro.min.js
 
-          echo "当前北京时间小时数：$hour_cst"
+      - name: Download 54ads JS
+        run: |
+          mkdir -p 54
+          curl -fsSL -o 54/1.js https://cdn.54ads.com/7db20370.js
 
-          if [ "$hour_cst" = "04" ]; then
-            echo "当前为凌晨 4 点，开始执行清理请求..."
-            response=$(curl -s "https://tc.qdqqd.com/cleanupwc?time=$timestamp")
-            echo "清理接口响应：$response"
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add 51/1.js 54/1.js
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
           else
-            echo "非凌晨 4 点，跳过清理请求。"
+            git commit -m "Auto update JS files [skip ci]"
+            git push
           fi
